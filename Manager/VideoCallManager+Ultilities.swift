@@ -13,7 +13,7 @@ extension VideoCallManager {
     public func connect(host: String,
                         port: String,
                         part: String?,
-                        onCompleted: (() -> Void)? = nil ) {
+                        onCompleted: @escaping ((Bool) -> Void)) {
         guard let url = URL(string: "ws://\(host):\(port)" + (part ?? "")) else {
             print("Cannot connect, url invalid")
             return
@@ -21,10 +21,10 @@ extension VideoCallManager {
         var isCompleted = false
         tryToConnectWebSocket = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] (timer) in
             guard let self = self else { return }
-            if self.webRTCClient.isConnected || self.socket.isConnected {
+            if self.socket.isConnected {
                 if !isCompleted {
                     isCompleted = true
-                    onCompleted?()
+                    onCompleted(self.socket.isConnected)
                 }
                 return
             }
