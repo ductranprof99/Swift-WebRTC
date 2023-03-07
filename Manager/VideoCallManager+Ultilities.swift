@@ -8,6 +8,9 @@
 import Foundation
 import WebRTC
 
+typealias VideoCallReport = (sender: RTCStatisticsReport?,
+                             receiver: RTCStatisticsReport?)
+
 extension VideoCallManager {
     
     public func connect(host: String,
